@@ -1,13 +1,10 @@
 import { User } from "../resources/user/user.model";
+import { UserApiSchema } from "../resources/user/user.schema";
 import { newToken, verifyToken } from "./jwt";
 
 const signup = async (req, res) => {
-  if (!req.body.email || !req.body.password) {
-    return res.status(400).send({
-      message: "Required fields missing",
-    });
-  }
   try {
+    const value = await UserApiSchema.validateAsync(req.body);
     const user = await User.create(req.body);
     const token = newToken(user);
     return res.status(201).send({ status: "ok", token: token });
@@ -18,28 +15,28 @@ const signup = async (req, res) => {
         status: `User Already Exists`,
       });
     }
-    return res.status(400).send({ status: "Error Communicating with server" });
+    return res.status(400).send({ status: "error", error: e.message });
   }
 };
 
 const signin = async (req, res) => {
-  if (!req.body.email || !req.body.password)
-    return res.status(400).send({ message: "Email and password required" });
-  const user = await User.findOne({ email: req.body.email }).exec();
-  if (!user) {
-    return res.status(400).send({ message: "Invalid Email or Password" });
-  }
-
   try {
+    await UserApiSchema.validateAsync(req.body);
+    const user = await User.findOne({ email: req.body.email }).exec();
+    if (!user) {
+      return res.status(400).send({ message: "Invalid Email or Password" });
+    }
     const match = await user.checkPassword(req.body.password);
     if (!match) {
       return res.status(401).send({ message: "Invalid Credentials" });
     }
     const token = newToken(user);
-    return res.status(201).send({ status: "ok", token: token });
+    return res.status(200).send({ status: "ok", token: token });
   } catch (e) {
-    console.log(e);
-    return res.status(401).send({ message: "Not Authorized" });
+    console.log(e.message);
+    const message = { message: "Not Authorized" };
+    if (!e.message.includes("password")) message.error = e.message;
+    return res.status(401).send(message);
   }
 };
 
