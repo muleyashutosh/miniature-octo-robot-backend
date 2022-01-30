@@ -1,16 +1,20 @@
 import jwt from "jsonwebtoken";
 import SECRETS from "./config";
 
-export const newToken = (user) => {
+const newToken = (user) => {
   return jwt.sign({ id: user._id }, SECRETS.jwt, {
     expiresIn: SECRETS.jwtExp,
   });
 };
 
-export const verifyToken = (token) =>
+const verifyToken = (token) =>
   new Promise((resolve, reject) => {
     jwt.verify(token, SECRETS.jwt, (err, payload) => {
       if (err) return reject(err);
       resolve(payload);
     });
   });
+
+export default {
+  newToken, verifyToken
+}
