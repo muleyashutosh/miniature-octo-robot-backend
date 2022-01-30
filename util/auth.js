@@ -1,12 +1,12 @@
 import { User } from "../resources/user/user.model";
 import { UserApiSchema } from "../resources/user/user.schema";
-import { newToken, verifyToken } from "./jwt";
+import jwt from "./jwt";
 
 const signup = async (req, res) => {
   try {
     const value = await UserApiSchema.validateAsync(req.body);
     const user = await User.create(req.body);
-    const token = newToken(user);
+    const token = jwt.newToken(user);
     return res.status(201).send({ status: "ok", token: token });
   } catch (e) {
     console.log(e.message);
@@ -30,7 +30,7 @@ const signin = async (req, res) => {
     if (!match) {
       return res.status(401).send({ message: "Invalid Credentials" });
     }
-    const token = newToken(user);
+    const token = jwt.newToken(user);
     return res.status(200).send({ status: "ok", token: token });
   } catch (e) {
     console.log(e.message);
@@ -49,7 +49,7 @@ const protect = async (req, res, next) => {
     return res.status(401).end();
   }
   try {
-    const payload = await verifyToken(token);
+    const payload = await jwt.verifyToken(token);
     console.log(payload);
     const user = await User.findById(payload.id).select("-password");
     req.user = user;
