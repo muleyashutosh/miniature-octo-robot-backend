@@ -28,7 +28,8 @@
     "joi": "^17.5.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.1.8",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "rand-token": "^1.0.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",

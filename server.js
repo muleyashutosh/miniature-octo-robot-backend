@@ -3,7 +3,8 @@ import morgan from "morgan";
 import cors from "cors";
 import SECRETS from "./util/config";
 import { connect } from "./util/db";
-import { signin, signup, protect } from "./util/auth";
+import { protect } from "./util/protect";
+import AuthRouter from './resources/auth/auth.router'
 
 const app = express();
 const PORT = SECRETS.PORT || 3000;
@@ -13,8 +14,7 @@ app.use(json());
 app.use(cors());
 app.use(morgan("dev"));
 
-app.post("/signin", signin);
-app.post("/signup", signup);
+app.use('/auth', AuthRouter)
 
 app.get("/", protect, (req, res) => {
   res.json({
