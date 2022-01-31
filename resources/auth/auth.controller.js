@@ -17,7 +17,7 @@ const signup = async (req, res) => {
     await UserApiSchema.validateAsync(req.body);
 
     const user = await User.create([req.body], {session: session});
-    const token = jwt.newToken(user);
+    const token = jwt.newToken(user[0]);
     const randomToken = randToken.uid(256);
     const refreshtoken = await RefreshToken.create([{token: randomToken, user: user[0]._id }], { session: session })
 
