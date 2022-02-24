@@ -1,6 +1,8 @@
 import joi from "joi";
 
 export const UserApiSchema = joi.object({
+  firstName: joi.string(),
+  lastName: joi.string(),
   email: joi.string().email().required(),
   password: joi
     .string()
