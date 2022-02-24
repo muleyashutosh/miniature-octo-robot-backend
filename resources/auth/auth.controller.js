@@ -34,13 +34,14 @@ const signup = async (req, res) => {
 
     session.endSession();
 
+    const errorResponse = {status: "error"}
+
     if (e.toString().includes("E11000 duplicate key error collection")) {
-      return res.status(400).send({
-        status: `User Already Exists`,
-      });
+      errorResponse.message = `User Already Exists`;
+      errorResponse.error = e.message;
     }
 
-    return res.status(400).send({ status: "error", error: e.message });
+    return res.status(400).send(errorResponse);
   }
 };
 
@@ -59,7 +60,7 @@ const signin = async (req, res) => {
     return res.status(200).send({ status: "ok", token: token });
   } catch (e) {
     console.log(e.message);
-    const message = { message: "Not Authorized" };
+    const message = { status:"error", message: "Not Authorized" };
     if (!e.message.includes("password")) message.error = e.message;
     return res.status(401).send(message);
   }
@@ -83,7 +84,7 @@ const refresh = async (req,res) => {
 
   } catch (e) {
     console.log(e.message);
-    return res.status(500).json({error: 'error', 'message': e.message})
+    return res.status(500).json({status:"error", error: 'error', 'message': e.message})
   }
 
 };
@@ -104,7 +105,7 @@ const reject = async (req, res) => {
     return res.json({"message": "Refresh Token revoked"})
 
   } catch(e) {
-    return res.status(400).json({'message': "error", error: e.message})
+    return res.status(400).json({status: "error", message: "Unable to revoke token", error: e.message})
   }
 }
 
