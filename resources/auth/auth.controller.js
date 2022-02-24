@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 import randToken from 'rand-token';
 import jwt from "../../util/jwt";
 import { User } from "../user/user.model";
-import { UserApiSchema } from "../user/user.schema";
+import { UserApiSigninSchema, UserApiSignupSchema } from "../user/user.schema";
 import { TokenApiSchema } from './auth.schema';
 import { RefreshToken } from './refreshToken.model';
 
@@ -14,7 +14,7 @@ const signup = async (req, res) => {
   try {
     session.startTransaction();
   
-    await UserApiSchema.validateAsync(req.body);
+    await UserApiSignupSchema.validateAsync(req.body);
 
     const user = await User.create([req.body], {session: session});
     const token = jwt.newToken(user[0]);
@@ -46,7 +46,7 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
   try {
-    await UserApiSchema.validateAsync(req.body);
+    await UserApiSigninSchema.validateAsync(req.body);
     const user = await User.findOne({ email: req.body.email }).exec();
     if (!user) {
       return res.status(400).send({ message: "Invalid Email or Password" });

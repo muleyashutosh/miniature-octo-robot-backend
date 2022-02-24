@@ -1,8 +1,19 @@
 import joi from "joi";
 
-export const UserApiSchema = joi.object({
-  firstName: joi.string(),
-  lastName: joi.string(),
+export const UserApiSignupSchema = joi.object({
+  firstName: joi.string().required(),
+  lastName: joi.string().required(),
+  email: joi.string().email().required(),
+  password: joi
+    .string()
+    .min(8)
+    .regex(/[A-Z]/, "at least one upper-case")
+    .regex(/[a-z]/, "at least one lower-case")
+    .regex(/[^\w]/, "at least one special character")
+    .required(),
+});
+
+export const UserApiSigninSchema = joi.object({
   email: joi.string().email().required(),
   password: joi
     .string()
