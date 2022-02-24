@@ -16,7 +16,7 @@ app.use(morgan("dev"));
 
 app.use('/auth', AuthRouter)
 
-app.get("/", protect, (req, res) => {
+app.get("/", (req, res) => {
   res.json({
     message: "Hello World!",
     user: req.user,
