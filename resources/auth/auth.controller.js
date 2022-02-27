@@ -26,7 +26,7 @@ const signup = async (req, res) => {
 
     res.cookie('jwt', refreshToken, {
       sameSite: 'None',
-      // secure: true,
+      secure: true,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000
     });
@@ -67,7 +67,7 @@ const signin = async (req, res) => {
 
     res.cookie('jwt', refreshToken, {
       sameSite: 'None',
-      // secure: true,
+      secure: true,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000
     });
@@ -92,11 +92,12 @@ const refresh = async (req, res) => {
     const refreshToken = cookies.jwt;
 
     const refreshTokenData = await RefreshToken.findOne({ token: refreshToken }).populate("user", "email")
-    console.log(refreshTokenData.user.email);
-
+    
     if (!refreshTokenData || !refreshTokenData.is_enabled) {
       return res.status(403).json({ "message": "Invalid Refresh Token or email. Contact Admin" });
     }
+    
+    console.log(refreshTokenData.user.email);
 
     // evaluate jwt
     const payload = await jwt.verifyToken(refreshTokenData.token, REFRESH_TOKEN_SECRET, refreshTokenData.user)
