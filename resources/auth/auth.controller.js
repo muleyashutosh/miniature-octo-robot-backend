@@ -65,6 +65,8 @@ const signin = async (req, res) => {
     const accessToken = jwt.newToken(user, ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRY);
     const refreshToken = jwt.newToken(user, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY);
 
+    await RefreshToken.findOneAndUpdate({user: user._id}, {token: refreshToken})
+
     res.cookie('jwt', refreshToken, {
       sameSite: 'None',
       secure: true,
