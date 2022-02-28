@@ -22,11 +22,14 @@
 
     npm i
 
-  5. Make sure you have a `.env` file with the following contents.
+  5. Make sure you have a `.env` file and add environment variables with the following command.
   
-    MONGO_CONNECTION_STRING=***REMOVED***
+```
+echo "MONGO_CONNECTION_STRING=***REMOVED***
+ACCESS_TOKEN_SECRET=***REMOVED***
+REFRESH_TOKEN_SECRET=***REMOVED***" > .env
 
-    JWT_SECRET=b1f71e593b42d7af5f27cd2441a186ba7957cc46395086ebdea91417c2187f57
+```
 
 
 ## Available Scripts
