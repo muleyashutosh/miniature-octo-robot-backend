@@ -7,15 +7,20 @@ import { connect } from "./util/db";
 import { protect } from "./util/protect";
 import AuthRouter from './resources/auth/auth.router'
 import TransactionRouter from './resources/transactions/transactions.router'
+import corsOptions from "./util/corsOptions";
+import credentials from "./util/credentials";
 
 const app = express();
 const PORT = SECRETS.PORT || 3000;
 
+app.use(credentials);
+
+app.use(cors(corsOptions));
+
+app.use(morgan("dev"));
 app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(cookieParser())
-app.use(cors());
-app.use(morgan("dev"));
 
 app.use('/auth', AuthRouter)
 
