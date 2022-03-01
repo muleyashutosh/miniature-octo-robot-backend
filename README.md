@@ -1,7 +1,5 @@
 # miniature-octo-robot-backend
 
-
-
 ## First setup instructions
 
   1. Make sure to have LTS version of node and npm installed [nodejs](http://nodejs.org)
@@ -48,5 +46,3 @@ To start development Server
 
 Run formatter on files
 
-
-JAADUU
