@@ -45,7 +45,7 @@ const signup = async (req, res) => {
     if (e.toString().includes("E11000 duplicate key error collection")) {
       errorResponse.message = `User Already Exists`;
     }
-    
+    else errorResponse.message = e.message;
     errorResponse.error = e.message;
     return res.status(400).send(errorResponse);
   }
