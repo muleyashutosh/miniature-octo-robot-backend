@@ -24,11 +24,18 @@ const signup = async (req, res) => {
 
     session.endSession();
 
-    res.cookie('jwt', refreshToken, {
+    res.cookie('refresh_jwt', refreshToken, {
       sameSite: 'None',
       secure: true,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000
+    });
+
+    res.cookie('access_jwt', accessToken, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000
     });
 
     return res.status(201).send({ status: "ok", accessToken });
@@ -68,11 +75,18 @@ const signin = async (req, res) => {
 
     await RefreshToken.findOneAndUpdate({user: user._id}, {token: refreshToken})
 
-    res.cookie('jwt', refreshToken, {
+    res.cookie('refresh_jwt', refreshToken, {
       sameSite: 'None',
       secure: true,
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000
+    });
+
+    res.cookie('access_jwt', accessToken, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000
     });
 
     return res.json({ status: "ok", accessToken });
@@ -89,10 +103,10 @@ const refresh = async (req, res) => {
   try {
     const cookies = req.cookies;
 
-    if (!cookies?.jwt) return res.sendStatus(403);
+    if (!cookies?.refresh_jwt) return res.sendStatus(403);
 
-    console.log(cookies.jwt)
-    const refreshToken = cookies.jwt;
+    console.log(cookies.refresh_jwt)
+    const refreshToken = cookies.refresh_jwt;
 
     const refreshTokenData = await RefreshToken.findOne({ token: refreshToken }).populate("user", "email")
     
@@ -110,6 +124,13 @@ const refresh = async (req, res) => {
       ACCESS_TOKEN_SECRET,
       ACCESS_TOKEN_EXPIRY
     )
+
+    res.cookie('access_jwt', accessToken, {
+      sameSite: 'None',
+      secure: true,
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000
+    });
 
     return res.json({ status: "ok", accessToken })
 
@@ -145,16 +166,21 @@ const logout = async (req, res) => {
 
   const cookies = req.cookies;
 
-  if (!cookies?.jwt) return res.sendStatus(204);
+  if (!cookies?.refresh_jwt) return res.sendStatus(204);
 
-  console.log(cookies.jwt)
-  const refreshToken = cookies.jwt;
+  console.log(cookies.refresh_jwt)
+  const refreshToken = cookies.refresh_jwt;
 
   // if refreshToken in DB, delete
   await RefreshToken.findOneAndDelete({ token: refreshToken });
 
   // clear Cookie
-  res.clearCookie('jwt', {
+  res.clearCookie('refresh_jwt', {
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+  })
+  res.clearCookie('access_jwt', {
     httpOnly: true,
     sameSite: 'None',
     secure: true,
