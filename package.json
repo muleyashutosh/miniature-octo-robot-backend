@@ -33,7 +33,9 @@
     "morgan": "^1.10.0",
     "rand-token": "^1.0.1",
     "ipfs": "^0.62.1",
-    "ipfs-http-client": "^52.0.4-rc.4"
+    "ipfs-http-client": "^52.0.4-rc.4",
+    "fabric-ca-client": "^2.2.4",
+    "fabric-network": "^2.2.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",
