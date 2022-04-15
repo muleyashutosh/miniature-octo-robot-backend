@@ -12,8 +12,8 @@ import credentials from "./util/credentials";
 import { Gateway, Wallets } from 'fabric-network';
 import FabricCAServices from 'fabric-ca-client';
 import path from 'path';
-import { buildCAClient, registerAndEnrollUser, enrollAdmin } from '../../test-application/javascript/CAUtil.js';
-import { buildCCPOrg1, buildWallet } from '../../test-application/javascript/AppUtil.js';
+import { buildCAClient, registerAndEnrollUser, enrollAdmin } from './test-application/javascript/CAUtil.js';
+import { buildCCPOrg1, buildWallet } from './test-application/javascript/AppUtil';
 import { fileURLToPath } from 'url';
 
 const mspOrg1 = 'Org1MSP';

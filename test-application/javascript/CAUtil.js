@@ -14,7 +14,7 @@ const adminUserPasswd = 'adminpw';
  * @param {*} FabricCAServices
  * @param {*} ccp
  */
-exports.buildCAClient = (FabricCAServices, ccp, caHostName) => {
+const buildCAClient = (FabricCAServices, ccp, caHostName) => {
 	// Create a new CA client for interacting with the CA.
 	const caInfo = ccp.certificateAuthorities[caHostName]; //lookup CA details from config
 	const caTLSCACerts = caInfo.tlsCACerts.pem;
@@ -24,7 +24,7 @@ exports.buildCAClient = (FabricCAServices, ccp, caHostName) => {
 	return caClient;
 };
 
-exports.enrollAdmin = async (caClient, wallet, orgMspId) => {
+const enrollAdmin = async (caClient, wallet, orgMspId) => {
 	try {
 		// Check to see if we've already enrolled the admin user.
 		const identity = await wallet.get(adminUserId);
@@ -50,7 +50,7 @@ exports.enrollAdmin = async (caClient, wallet, orgMspId) => {
 	}
 };
 
-exports.registerAndEnrollUser = async (caClient, wallet, orgMspId, userId,affiliation) => {
+const registerAndEnrollUser = async (caClient, wallet, orgMspId, userId, affiliation) => {
 	try {
 		// Check to see if we've already enrolled the user
 		const userIdentity = await wallet.get(userId);
@@ -96,3 +96,5 @@ exports.registerAndEnrollUser = async (caClient, wallet, orgMspId, userId,affili
 		console.error(`Failed to register user : ${error}`);
 	}
 };
+
+export { buildCAClient, registerAndEnrollUser, enrollAdmin }

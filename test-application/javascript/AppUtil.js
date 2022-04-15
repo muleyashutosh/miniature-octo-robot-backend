@@ -6,10 +6,14 @@
 
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-exports.buildCCPOrg1 = () => {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const buildCCPOrg1 = () => {
 	// load the common connection configuration file
 	const ccpPath = path.resolve(__dirname, '..', '..', 'test-network', 'organizations', 'peerOrganizations', 'org1.example.com', 'connection-org1.json');
 	const fileExists = fs.existsSync(ccpPath);
@@ -25,7 +29,7 @@ exports.buildCCPOrg1 = () => {
 	return ccp;
 };
 
-exports.buildCCPOrg2 = () => {
+const buildCCPOrg2 = () => {
 	// load the common connection configuration file
 	const ccpPath = path.resolve(__dirname, '..', '..', 'test-network',
 		'organizations', 'peerOrganizations', 'org2.example.com', 'connection-org2.json');
@@ -42,7 +46,7 @@ exports.buildCCPOrg2 = () => {
 	return ccp;
 };
 
-exports.buildWallet = async (Wallets, walletPath) => {
+const buildWallet = async (Wallets, walletPath) => {
 	// Create a new  wallet : Note that wallet is for managing identities.
 	let wallet;
 	if (walletPath) {
@@ -56,11 +60,13 @@ exports.buildWallet = async (Wallets, walletPath) => {
 	return wallet;
 };
 
-exports.prettyJSONString = (inputString) => {
+const prettyJSONString = (inputString) => {
 	if (inputString) {
-		 return JSON.stringify(JSON.parse(inputString), null, 2);
+		return JSON.stringify(JSON.parse(inputString), null, 2);
 	}
 	else {
-		 return inputString;
+		return inputString;
 	}
 }
+
+export { buildCCPOrg1, buildCCPOrg2, buildWallet, prettyJSONString }

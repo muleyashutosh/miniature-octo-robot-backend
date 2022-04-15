@@ -56,7 +56,7 @@ const addTransaction = async (req, res) => {
   if (`${asset}` !== '') {
     console.log(`*** Result: ${prettyJSONString(asset.toString())}`);
   }
-  // result = await contract.evaluateTransaction('ReadAsset', 'QmSxcM6u9ff45gb1cm7eZLX5A2NEHwfw');
+  // result = await contract.evaluateTransaction('ReadAsset', 'QmaaTsP9oweCk9a91MitATW6HTjjZXBYLDxPoHsXf2MdKV');
   // console.log(typeof (JSON.parse(result)["Sharedwith"]));
   // return res.json("Asset Created")
 }
@@ -72,7 +72,7 @@ const shareDocument = async (req, res) => {
   try {
     console.log('\n--> Submit Transaction: UpdateAsset asset70, asset70 does not exist and should return an error');
     await contract.submitTransaction('UpdateAsset', req.body.hash, req.body.sharedWith);
-    var result = await contract.evaluateTransaction('ReadAsset', 'QmSxcM6u9ff45gb1cm7eZLX5A2NEHwfw');
+    var result = await contract.evaluateTransaction('ReadAsset', 'QmaaTsP9oweCk9a91MitATW6HTjjZXBYLDxPoHsXf2MdKV');
     console.log(JSON.parse(result));
     console.log('******** FAILED to return an error');
   } catch (error) {
