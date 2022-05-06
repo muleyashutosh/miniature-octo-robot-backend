@@ -4,7 +4,21 @@ import { User } from "../user/user.model";
 import { UserApiSigninSchema, UserApiSignupSchema } from "../user/user.schema";
 import { RefreshToken } from './refreshToken.model';
 import { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_SECRET, REFRESH_TOKEN_EXPIRY } from '../../util/config';
+import { Gateway, Wallets } from 'fabric-network';
+import FabricCAServices from 'fabric-ca-client';
+import path from 'path';
+import { buildCAClient, registerAndEnrollUser, enrollAdmin } from '../../test-application/javascript/CAUtil';
+import { buildCCPOrg1, buildWallet } from '../../test-application/javascript/AppUtil';
+import { fileURLToPath } from 'url';
+import { ccp, caClient, wallet } from '../../server'
+let contract, userId;
 
+const channelName = 'mychannel';
+const chaincodeName = 'basic';
+const mspOrg1 = 'Org1MSP';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const walletPath = path.join(__dirname, 'wallet');
 
 const signup = async (req, res) => {
 
@@ -37,6 +51,22 @@ const signup = async (req, res) => {
       httpOnly: true,
       maxAge: 60 * 60 * 1000
     });
+
+    
+    await registerAndEnrollUser(caClient, wallet, mspOrg1, user[0]._id.toString(), 'org1.department1');
+    const gateway = new Gateway();
+
+    await gateway.connect(ccp, {
+      wallet,
+      identity: user[0]._id.toString(),
+      discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
+    });
+    // Build a network instance based on the channel where the smart contract is deployed
+    const network = await gateway.getNetwork(channelName);
+
+    // Get the contract from the network.
+    contract = network.getContract(chaincodeName);
+    userId = user[0]._id.toString();
 
     return res.status(201).send({ status: "ok", accessToken });
   } catch (e) {
@@ -88,6 +118,20 @@ const signin = async (req, res) => {
       httpOnly: true,
       maxAge: 60 * 60 * 1000
     });
+
+    const gateway = new Gateway();
+
+    await gateway.connect(ccp, {
+      wallet,
+      identity: user._id.toString(),
+      discovery: { enabled: true, asLocalhost: true } // using asLocalhost as this gateway is using a fabric network deployed locally
+    });
+    // Build a network instance based on the channel where the smart contract is deployed
+    const network = await gateway.getNetwork(channelName);
+
+    // Get the contract from the network.
+    contract = network.getContract(chaincodeName);
+    userId = user._id.toString();
 
     return res.json({ status: "ok", accessToken });
   } catch (e) {
@@ -191,6 +235,4 @@ const logout = async (req, res) => {
 }
 
 
-
-
-export { signup, signin, refresh, reject, logout };
+export { signup, signin, refresh, reject, logout, contract, userId };
