@@ -40,7 +40,6 @@ const getAllTransaction = async (req, res) => {
 
 const addTransaction = async (req, res) => {
   console.log(req.headers)
-  res.json("ok")
   let ipfs = await ipfsClient();
 
   let data = req.files.doc.data
@@ -56,6 +55,8 @@ const addTransaction = async (req, res) => {
   if (`${asset}` !== '') {
     console.log(`*** Result: ${prettyJSONString(asset.toString())}`);
   }
+  res.json("Upload Successful")
+
   // result = await contract.evaluateTransaction('ReadAsset', 'QmaaTsP9oweCk9a91MitATW6HTjjZXBYLDxPoHsXf2MdKV');
   // console.log(typeof (JSON.parse(result)["Sharedwith"]));
   // return res.json("Asset Created")
