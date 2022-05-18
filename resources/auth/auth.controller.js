@@ -7,12 +7,11 @@ import { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_SECRET, REFRESH
 import { Gateway, Wallets } from 'fabric-network';
 import FabricCAServices from 'fabric-ca-client';
 import path from 'path';
-import { buildCAClient, registerAndEnrollUser, enrollAdmin } from '../../test-application/javascript/CAUtil.js';
-import { buildCCPOrg1, buildWallet } from '../../test-application/javascript/AppUtil.js';
+import { buildCAClient, registerAndEnrollUser, enrollAdmin } from '../../test-application/javascript/CAUtil';
+import { buildCCPOrg1, buildWallet } from '../../test-application/javascript/AppUtil';
 import { fileURLToPath } from 'url';
 import { ccp, caClient, wallet } from '../../server'
 let contract, userId;
-export { contract, userId };
 
 const channelName = 'mychannel';
 const chaincodeName = 'basic';
@@ -236,4 +235,4 @@ const logout = async (req, res) => {
 }
 
 
-export { signup, signin, refresh, reject, logout };
+export { signup, signin, refresh, reject, logout, contract, userId };

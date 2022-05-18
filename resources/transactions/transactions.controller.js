@@ -1,11 +1,7 @@
-import randToken from 'rand-token'
 import { create } from "ipfs-http-client";
-import { Gateway, Wallets } from 'fabric-network';
-import { ccp, caClient, wallet } from '../../server'
 import { contract, userId } from '../auth/auth.controller'
-import { json } from 'express';
 import { encryptAES, decryptAES } from '../auth/cryptography'
-import crypto from 'crypto'
+
 import fs from 'fs'
 
 async function ipfsClient() {
@@ -23,13 +19,8 @@ function prettyJSONString(inputString) {
   return JSON.stringify(JSON.parse(inputString), null, 2);
 }
 
-const channelName = 'mychannel';
-const chaincodeName = 'basic';
-const algorithm = 'aes-256-ctr';
 const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
-const iv = 'vOVH6sdmpNWjRRIq'
-const encrypt = crypto.createCipheriv(algorithm, secretKey, iv);
-const decrypt = crypto.createDecipheriv(algorithm, secretKey, iv);
+
 
 // dummy api.
 const getAllTransaction = async (req, res) => {

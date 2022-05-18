@@ -30,7 +30,6 @@ export { ccp, caClient, wallet };
 const app = express();
 const PORT = SECRETS.PORT || 3000;
 
-
 app.use(credentials);
 
 app.use(cors(corsOptions));
