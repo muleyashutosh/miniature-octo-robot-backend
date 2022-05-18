@@ -7,8 +7,8 @@ import { ACCESS_TOKEN_SECRET, ACCESS_TOKEN_EXPIRY, REFRESH_TOKEN_SECRET, REFRESH
 import { Gateway, Wallets } from 'fabric-network';
 import FabricCAServices from 'fabric-ca-client';
 import path from 'path';
-import { buildCAClient, registerAndEnrollUser, enrollAdmin } from '../../../../test-application/javascript/CAUtil.js';
-import { buildCCPOrg1, buildWallet } from '../../../../test-application/javascript/AppUtil.js';
+import { buildCAClient, registerAndEnrollUser, enrollAdmin } from '../../test-application/javascript/CAUtil.js';
+import { buildCCPOrg1, buildWallet } from '../../test-application/javascript/AppUtil.js';
 import { fileURLToPath } from 'url';
 import { ccp, caClient, wallet } from '../../server'
 let contract, userId;

@@ -28,9 +28,9 @@ class AssetTransfer extends Contract {
     }
 
     // CreateAsset issues a new asset to the world state with given details.
-    async CreateAsset(ctx, id, docName, time, owner) {
+    async CreateAsset(ctx, id, docName,hash,time, owner) {
         const exists = await this.AssetExists(ctx, id);
-        const sharedWith=["Saksham"];
+        const sharedWith=[];
         if (exists) {
             throw new Error(`The asset ${id} already exists`);
         }
@@ -39,6 +39,7 @@ class AssetTransfer extends Contract {
             ID: id,
             Name: docName,
             Owner: owner,
+            OwnerDocHash:hash,
             TimeStamp: time,
             Sharedwith:sharedWith,
         };
@@ -60,8 +61,7 @@ class AssetTransfer extends Contract {
     async UpdateAsset(ctx, id,sharedWith) {
         const assetString = await this.ReadAsset(ctx, id);
         var asset = JSON.parse(assetString);
-        var currentlySharedWith = asset["Sharedwith"]
-        asset["Sharedwith"] = currentlySharedWith.push(sharedWith);
+        asset.Sharedwith=sharedWith
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
     }
