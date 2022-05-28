@@ -8,6 +8,6 @@ router.use(fileupload());
 
 router.route("/").get(getAllTransaction).put(shareDocument).post(addTransaction)
 router.route("/:id").delete(deleteTransaction)
-router.route("/:hash").post(getDocument)
+router.route("/:hash").get(getDocument)
 
 export default router;

@@ -2,6 +2,7 @@ import jwt from './jwt';
 import { User } from '../resources/user/user.model';
 import { ACCESS_TOKEN_EXPIRY, ACCESS_TOKEN_SECRET } from './config';
 
+
 const protect = async (req, res, next) => {
 
   const cookies = req.cookies;
@@ -13,8 +14,7 @@ const protect = async (req, res, next) => {
 
   try {
     const payload = await jwt.verifyToken(accessToken, ACCESS_TOKEN_SECRET);
-    console.log(payload);
-    const user = await User.findById(payload.id).select("-password");
+    const user = await User.findById(payload.id)
     req.user = user;
     next();
   } catch (e) {

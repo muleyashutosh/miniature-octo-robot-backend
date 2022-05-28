@@ -58,10 +58,23 @@ class AssetTransfer extends Contract {
     }
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async UpdateAsset(ctx, id,sharedWith) {
+    async UpdateAsset(ctx, id, sharedWith) {
         const assetString = await this.ReadAsset(ctx, id);
-        var asset = JSON.parse(assetString);
-        asset.Sharedwith=sharedWith
+        const asset = JSON.parse(assetString);
+
+        console.info('************************sharedWith************************');
+        console.info('INFO', sharedWith, typeof sharedWith);
+        console.info('***********************sharedWith*************************');
+
+        console.info('************************asset************************');
+        console.info('INFO', asset, typeof asset);
+        console.info('***********************asset*************************');
+
+        console.info('************************asset.SharedWith************************');
+        console.info('INFO', asset.SharedWith, typeof asset);
+        console.info('***********************asset.SharedWith*************************');
+
+        asset.Sharedwith.push(sharedWith);
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
     }
