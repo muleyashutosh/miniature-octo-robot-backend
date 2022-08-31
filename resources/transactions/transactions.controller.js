@@ -1,16 +1,23 @@
 import { create } from "ipfs-http-client";
 import { contract, userId } from "../auth/auth.controller";
 import { encryptAES, decryptAES } from "../auth/cryptography";
+import {SECRETS} from '../../util/config'
 import crypto from "crypto";
 
 import fs from "fs";
 // import { json } from "express/lib/response";
 
 async function ipfsClient() {
+  const projectId = SECRETS.INFURA_IPFS_PROJECT_ID;
+  const projectSecret = SECRETS.INFURA_IPFS_API_KEY_SECRET;
+  const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
   const ipfs = await create({
-    host: "ipfs.infura.io",
-    port: 5001,
+    host: SECRETS.INFURA_API_ENDPOINT,
+    port: SECRETS.INFURA_API_PORT,
     protocol: "https",
+    headers: {
+      authorization: auth
+    }
   });
   return ipfs;
 }
