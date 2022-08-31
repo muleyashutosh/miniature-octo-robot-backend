@@ -28,7 +28,7 @@ class AssetTransfer extends Contract {
     }
 
     // CreateAsset issues a new asset to the world state with given details.
-    async CreateAsset(ctx, id, docName,hash,time, owner) {
+    async CreateAsset(ctx, id, docName,hash,time, owner,broadcast) {
         const exists = await this.AssetExists(ctx, id);
         const sharedWith=[];
         if (exists) {
@@ -42,6 +42,7 @@ class AssetTransfer extends Contract {
             OwnerDocHash:hash,
             TimeStamp: time,
             Sharedwith:sharedWith,
+            Broadcast:broadcast
         };
         //we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         await ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
@@ -58,7 +59,7 @@ class AssetTransfer extends Contract {
     }
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async UpdateAsset(ctx, id, sharedWith) {
+    async UpdateAsset(ctx, id, sharedWith, broadcast) {
         const assetString = await this.ReadAsset(ctx, id);
         const asset = JSON.parse(assetString);
 
@@ -71,10 +72,16 @@ class AssetTransfer extends Contract {
         console.info('***********************asset*************************');
 
         console.info('************************asset.SharedWith************************');
-        console.info('INFO', asset.SharedWith, typeof asset);
+        console.info('INFO', asset.Sharedwith, typeof asset.Sharedwith);
         console.info('***********************asset.SharedWith*************************');
 
         asset.Sharedwith.push(sharedWith);
+        asset.Broadcast = broadcast;
+
+        console.info('************************updated_asset************************');
+        console.info('INFO', asset, typeof asset);
+        console.info('***********************updated_asset*************************');
+
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
     }

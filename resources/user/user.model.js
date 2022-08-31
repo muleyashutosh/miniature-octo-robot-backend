@@ -17,12 +17,16 @@ const UserSchema = new Schema(
     },
     firstName: {
       type: String,
-      trim: true
+      trim: true,
     },
     lastName: {
       type: String,
-      trim: true
-    }
+      trim: true,
+    },
+    role: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,
