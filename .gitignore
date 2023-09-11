@@ -106,3 +106,4 @@ bin/
 config/
 wallet/
 .vscode
+.DS_Store
