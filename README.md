@@ -25,9 +25,9 @@
   5. Make sure you have a `.env` file and add environment variables with the following command.
   
 ```
-echo "MONGO_CONNECTION_STRING=***REMOVED***
-ACCESS_TOKEN_SECRET=***REMOVED***
-REFRESH_TOKEN_SECRET=***REMOVED***" > .env
+echo "MONGO_CONNECTION_STRING=<>
+ACCESS_TOKEN_SECRET=<>
+REFRESH_TOKEN_SECRET=<>" > .env
 
 ```
 
