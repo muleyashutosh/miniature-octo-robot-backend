@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const { Schema, model } = mongoose;
+const { Schema, model, Types } = mongoose;
+
 import bcrypt from "bcrypt";
 
 const UserSchema = new Schema(
@@ -16,12 +17,16 @@ const UserSchema = new Schema(
     },
     firstName: {
       type: String,
-      trim: true
+      trim: true,
     },
     lastName: {
       type: String,
-      trim: true
-    }
+      trim: true,
+    },
+    role: {
+      type: String,
+      trim: true,
+    },
   },
   {
     timestamps: true,

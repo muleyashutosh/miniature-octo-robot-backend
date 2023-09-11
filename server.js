@@ -7,6 +7,7 @@ import { connect } from "./util/db";
 import { protect } from "./util/protect";
 import AuthRouter from './resources/auth/auth.router'
 import TransactionRouter from './resources/transactions/transactions.router'
+import SharedRouter from './resources/transactions/shared.router'
 import corsOptions from "./util/corsOptions";
 import credentials from "./util/credentials";
 import { Gateway, Wallets } from 'fabric-network';
@@ -41,6 +42,7 @@ app.use(cookieParser())
 app.use('/auth', AuthRouter)
 
 app.use('/transactions', protect, TransactionRouter)
+app.use('/shared', protect, SharedRouter)
 
 app.get("/", (req, res) => {
   res.json({

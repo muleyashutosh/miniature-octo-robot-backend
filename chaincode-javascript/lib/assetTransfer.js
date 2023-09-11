@@ -28,9 +28,9 @@ class AssetTransfer extends Contract {
     }
 
     // CreateAsset issues a new asset to the world state with given details.
-    async CreateAsset(ctx, id, docName, time, owner) {
+    async CreateAsset(ctx, id, docName,hash,time, owner,broadcast) {
         const exists = await this.AssetExists(ctx, id);
-        const sharedWith=["Saksham"];
+        const sharedWith=[];
         if (exists) {
             throw new Error(`The asset ${id} already exists`);
         }
@@ -39,8 +39,10 @@ class AssetTransfer extends Contract {
             ID: id,
             Name: docName,
             Owner: owner,
+            OwnerDocHash:hash,
             TimeStamp: time,
             Sharedwith:sharedWith,
+            Broadcast:broadcast
         };
         //we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         await ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
@@ -57,11 +59,29 @@ class AssetTransfer extends Contract {
     }
 
     // UpdateAsset updates an existing asset in the world state with provided parameters.
-    async UpdateAsset(ctx, id,sharedWith) {
+    async UpdateAsset(ctx, id, sharedWith, broadcast) {
         const assetString = await this.ReadAsset(ctx, id);
-        var asset = JSON.parse(assetString);
-        var currentlySharedWith = asset["Sharedwith"]
-        asset["Sharedwith"] = currentlySharedWith.push(sharedWith);
+        const asset = JSON.parse(assetString);
+
+        console.info('************************sharedWith************************');
+        console.info('INFO', sharedWith, typeof sharedWith);
+        console.info('***********************sharedWith*************************');
+
+        console.info('************************asset************************');
+        console.info('INFO', asset, typeof asset);
+        console.info('***********************asset*************************');
+
+        console.info('************************asset.SharedWith************************');
+        console.info('INFO', asset.Sharedwith, typeof asset.Sharedwith);
+        console.info('***********************asset.SharedWith*************************');
+
+        asset.Sharedwith.push(sharedWith);
+        asset.Broadcast = broadcast;
+
+        console.info('************************updated_asset************************');
+        console.info('INFO', asset, typeof asset);
+        console.info('***********************updated_asset*************************');
+
         // we insert data in alphabetic order using 'json-stringify-deterministic' and 'sort-keys-recursive'
         return ctx.stub.putState(id, Buffer.from(stringify(sortKeysRecursive(asset))));
     }
